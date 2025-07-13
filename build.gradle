@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.jar2dll'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Task to compile tools separately for build script
+task compileTools(type: JavaCompile) {
+    source = fileTree('src/main/java/com/jar2dll/tools')
+    classpath = configurations.compileClasspath
+    destinationDirectory = file('build/tools')
+    options.release = 8
+}
+
+// Task to compile injectors separately for build script
+task compileInjectors(type: JavaCompile) {
+    source = fileTree('src/main/java/com/jar2dll/injectors')
+    classpath = configurations.compileClasspath
+    destinationDirectory = file('build/injectors')
+    options.release = 8
+}
